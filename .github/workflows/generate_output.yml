@@ -1,0 +1,174 @@
+name: CI output design
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '*.sch'
+      - '*.kicad_pcb'
+      - '*.kiplot.yaml'
+      - '.github/workflows/generate_output.yml'
+      - 'design.kiplot.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '*.sch'
+      - '*.kicad_pcb'
+      - '*.kiplot.yaml'
+      - '.github/workflows/generate_output.yml'
+      - 'design.kiplot.yml'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # ERC:
+  #   runs-on: ubuntu-latest
+  #   container: setsoft/kicad_auto:latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Run ERC
+  #     run: |
+  #       [ -f *.sch ] && kiplot  -d Fabrication -s update_xml,run_drc -i
+  #   - name: Retrieve results
+  #     uses: actions/upload-artifact@v1
+  #     with:
+  #       name: ERC_Output
+  #       path: Fabrication
+
+  # DRC:
+  #   runs-on: ubuntu-latest
+  #   container: setsoft/kicad_auto:latest
+  #   needs: ERC
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Run DRC
+  #     run: |
+  #       [ -f *.kicad_pcb ] && kiplot  -d Fabrication -s update_xml,run_erc -i
+  #   - name: Retrieve results
+  #     uses: actions/upload-artifact@v1
+  #     with:
+  #       name: DRC_Output
+  #       path: Fabrication
+
+  FabSch:
+    name: Schematic fabrication files
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto:latest
+    # needs: ERC
+
+    steps:
+    - name: Update system repositories, Install Required Libraries and Initialize git-lfs
+      run: |
+        apt update
+        apt -y install git
+    
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Assign variables from project.properties to Env variable
+      run: |
+        cat project.properties >> $GITHUB_ENV  
+    
+    - name: Update the Schematic with the git hash
+      run: |
+        export COMMIT=$(git rev-parse --short HEAD)
+        echo "COMMIT = ${COMMIT}"
+        sed -i "s!<<hash>>!Git-${COMMIT}!" *.sch
+        sed -i "s!<<project_name>>!${{ env.project_name }}!" *.sch
+        sed -i "s!<<date>>!$(date +'%Y-%m-%d')!" *.sch 
+    - name: Retrieve results from git hash update
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ env.project_name }}_Schematic_raw
+        path: 'design.sch'
+
+    - name: Run Schematic and BOM 
+      run: |
+        [ -f design.sch ] && kiplot -d Fabrication -s all  print_sch interactive_bom 
+    #bom_csv
+    - name: Retrieve resulted PDF and BOM
+      uses: actions/upload-artifact@v1
+      with:
+        name: FabSch_Output
+        path: 'Fabrication'
+
+  BOM:
+    name: Update Bom and upload
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto:latest
+    # needs: ERC
+
+    steps:
+    - name: Update system repositories, Install Required Libraries
+      run: |
+        apt update
+        apt -y install git
+    
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Assign variables from project.properties to Env variable
+      run: |
+        cat project.properties >> $GITHUB_ENV  
+
+    - name: Run BOM 
+      run: |
+        [ -f *.sch ] && kiplot -d Fabrication -s all bom_csv pcb_top_b
+        head -n -12 Fabrication/BoM/design-bom.csv > Fabrication/BoM/design-bom-short.csv 
+    #- name: Retrieve resulted BOM
+    #  uses: actions/upload-artifact@v1
+    #  with:
+    #    name: BoM
+    #    path: 'Fabrication'
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        repository: .
+        commit_message: Update Bom
+
+  FabPCB:
+    name: PCB fabrication files
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto:latest
+    # needs: DRC
+    
+    steps:
+    - name: Update system repositories, Install Required Libraries and Initialize git-lfs
+      run: |
+        apt update
+        apt -y install git git-lfs zip librsvg2-bin imagemagick
+        git lfs install
+    
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: Assign variables from project.properties to Env variable
+      run: |
+        cat project.properties >> $GITHUB_ENV 
+    
+    - name: Update the PCBs with the git hash
+      run: |
+        export COMMIT=$(git rev-parse --short HEAD)
+        echo "COMMIT = ${COMMIT}"
+        sed -i "s!<<hash>>!Git-${COMMIT}!" *.kicad_pcb
+        sed -i "s!<<project_name>>!${{ env.project_name }}!" *.kicad_pcb
+        sed -i "s!<<date>>!$(date +'%Y-%m-%d')!" *.kicad_pcb 
+    - name: Retrieve results kicad_pcb with the git hash
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ env.project_name }}_Kicad_PCB_raw
+        path: 'design.kicad_pcb'
+    - name: Run PCB stuff
+      run: |
+        [ -f design.kicad_pcb ] && kiplot  -d Fabrication -s all print_front print_back gerbers gerber_drills pcb_top_b pcb_bottom_b step
+    - name: Retrieve results
+      uses: actions/upload-artifact@v1
+      with:
+        name: FabPCB_Output
+        path: 'Fabrication'
