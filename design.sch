@@ -14,58 +14,121 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MCU_Microchip_ATtiny:ATtiny1616-M U1
-U 1 1 616F1752
-P 5650 3750
-F 0 "U1" H 5650 4831 50  0000 C CNN
-F 1 "ATtiny1616-M" H 5650 4740 50  0000 C CNN
-F 2 "Package_DFN_QFN:VQFN-20-1EP_3x3mm_P0.4mm_EP1.7x1.7mm" H 5650 3750 50  0001 C CIN
-F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny3216_ATtiny1616-data-sheet-40001997B.pdf" H 5650 3750 50  0001 C CNN
-	1    5650 3750
-	1    0    0    -1  
-$EndComp
-$Comp
 L Connector:USB_C_Receptacle J1
 U 1 1 616F374E
-P 2675 3575
-F 0 "J1" H 2782 4842 50  0000 C CNN
-F 1 "USB_C_Receptacle" H 2782 4751 50  0000 C CNN
-F 2 "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12" H 2825 3575 50  0001 C CNN
-F 3 "https://www.usb.org/sites/default/files/documents/usb_type-c.zip" H 2825 3575 50  0001 C CNN
-	1    2675 3575
+P 1375 2050
+F 0 "J1" H 1482 3317 50  0000 C CNN
+F 1 "USB_C_Receptacle" H 1482 3226 50  0000 C CNN
+F 2 "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12" H 1525 2050 50  0001 C CNN
+F 3 "https://www.usb.org/sites/default/files/documents/usb_type-c.zip" H 1525 2050 50  0001 C CNN
+	1    1375 2050
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C1
-U 1 1 616F543B
-P 6875 2575
-F 0 "C1" H 6967 2621 50  0000 L CNN
-F 1 "C_Small" H 6967 2530 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 6875 2575 50  0001 C CNN
-F 3 "~" H 6875 2575 50  0001 C CNN
-	1    6875 2575
+L Connector:USB_C_Receptacle J?
+U 1 1 61C9239B
+P 10200 2450
+F 0 "J?" H 10307 3717 50  0000 C CNN
+F 1 "USB_C_Receptacle" H 10307 3626 50  0000 C CNN
+F 2 "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12" H 10350 2450 50  0001 C CNN
+F 3 "https://www.usb.org/sites/default/files/documents/usb_type-c.zip" H 10350 2450 50  0001 C CNN
+	1    10200 2450
+	-1   0    0    1   
+$EndComp
+Wire Notes Line
+	3300 475  3300 3950
+Wire Notes Line
+	3300 3950 475  3950
+Text Notes 2575 650  0    50   ~ 0
+To Host / PC
+Wire Notes Line
+	8375 450  8375 3925
+Wire Notes Line
+	8375 3925 11225 3925
+$Comp
+L power:GND #PWR?
+U 1 1 61C96041
+P 1375 3650
+F 0 "#PWR?" H 1375 3400 50  0001 C CNN
+F 1 "GND" H 1380 3477 50  0000 C CNN
+F 2 "" H 1375 3650 50  0001 C CNN
+F 3 "" H 1375 3650 50  0001 C CNN
+	1    1375 3650
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C2
-U 1 1 616F58A4
-P 6875 2900
-F 0 "C2" H 6967 2946 50  0000 L CNN
-F 1 "C_Small" H 6967 2855 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 6875 2900 50  0001 C CNN
-F 3 "~" H 6875 2900 50  0001 C CNN
-	1    6875 2900
+L power:VCC #PWR?
+U 1 1 61C96E6B
+P 2225 1050
+F 0 "#PWR?" H 2225 900 50  0001 C CNN
+F 1 "VCC" H 2240 1223 50  0000 C CNN
+F 2 "" H 2225 1050 50  0001 C CNN
+F 3 "" H 2225 1050 50  0001 C CNN
+	1    2225 1050
 	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1975 1050 2225 1050
+$Comp
+L Device:R_Small R?
+U 1 1 61C988F5
+P 2500 1250
+F 0 "R?" V 2304 1250 50  0000 C CNN
+F 1 "R_Small" V 2395 1250 50  0000 C CNN
+F 2 "" H 2500 1250 50  0001 C CNN
+F 3 "~" H 2500 1250 50  0001 C CNN
+	1    2500 1250
+	0    1    1    0   
 $EndComp
 $Comp
-L Connector_Generic:Conn_01x05 J2
-U 1 1 616F6E85
-P 7775 3850
-F 0 "J2" H 7855 3892 50  0000 L CNN
-F 1 "Conn_01x05" H 7855 3801 50  0000 L CNN
-F 2 "E32-xxxT20D:UDPI_interface" H 7775 3850 50  0001 C CNN
-F 3 "~" H 7775 3850 50  0001 C CNN
-	1    7775 3850
+L Device:R_Small R?
+U 1 1 61C99361
+P 2850 1350
+F 0 "R?" V 2654 1350 50  0000 C CNN
+F 1 "R_Small" V 2745 1350 50  0000 C CNN
+F 2 "" H 2850 1350 50  0001 C CNN
+F 3 "~" H 2850 1350 50  0001 C CNN
+	1    2850 1350
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2750 1350 1975 1350
+Wire Wire Line
+	1975 1250 2400 1250
+Wire Wire Line
+	2600 1250 3150 1250
+Wire Wire Line
+	3150 1250 3150 1350
+Wire Wire Line
+	3150 1350 2950 1350
+$Comp
+L power:GND #PWR?
+U 1 1 61C9A95A
+P 3150 1350
+F 0 "#PWR?" H 3150 1100 50  0001 C CNN
+F 1 "GND" H 3155 1177 50  0000 C CNN
+F 2 "" H 3150 1350 50  0001 C CNN
+F 3 "" H 3150 1350 50  0001 C CNN
+	1    3150 1350
 	1    0    0    -1  
 $EndComp
+Connection ~ 3150 1350
+Text GLabel 1975 1750 2    50   Input ~ 0
+D+
+Text GLabel 1975 1850 2    50   Input ~ 0
+D+
+Text GLabel 1975 1650 2    50   Input ~ 0
+D-
+Text GLabel 1975 1550 2    50   Input ~ 0
+D-
+NoConn ~ 1975 2050
+NoConn ~ 1975 2150
+NoConn ~ 1975 2350
+NoConn ~ 1975 2450
+NoConn ~ 1975 2650
+NoConn ~ 1975 2750
+NoConn ~ 1975 2950
+NoConn ~ 1975 3050
+NoConn ~ 1975 3250
+NoConn ~ 1975 3350
 $EndSCHEMATC
