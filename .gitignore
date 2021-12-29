@@ -92,3 +92,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# KiCad Backup
+design-backups/
