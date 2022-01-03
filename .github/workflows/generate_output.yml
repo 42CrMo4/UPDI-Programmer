@@ -89,7 +89,7 @@ jobs:
 
     - name: Run Schematic and BOM 
       run: |
-        [ -f design.sch ] && kiplot -d Fabrication -s all  print_sch interactive_bom 
+        [ -f design.kicad_sch ] && kiplot -d Fabrication -s all  print_sch interactive_bom 
     #bom_csv
     - name: Retrieve resulted PDF and BOM
       uses: actions/upload-artifact@v1
@@ -118,7 +118,7 @@ jobs:
 
     - name: Run BOM 
       run: |
-        [ -f *.sch ] && kiplot -d Fabrication -s all bom_csv pcb_top_b
+        [ -f *.kicad_sch ] && kiplot -d Fabrication -s all bom_csv pcb_top_b
         head -n -12 Fabrication/BoM/design-bom.csv > Fabrication/BoM/design-bom-short.csv 
     #- name: Retrieve resulted BOM
     #  uses: actions/upload-artifact@v1
