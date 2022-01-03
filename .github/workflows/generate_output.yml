@@ -6,7 +6,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '*.sch'
+      - '*.kicad_sch'
       - '*.kicad_pcb'
       - '*.kiplot.yaml'
       - '.github/workflows/generate_output.yml'
@@ -14,7 +14,7 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - '*.sch'
+      - '*.kicad_sch'
       - '*.kicad_pcb'
       - '*.kiplot.yaml'
       - '.github/workflows/generate_output.yml'
@@ -85,7 +85,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: ${{ env.project_name }}_Schematic_raw
-        path: 'design.sch'
+        path: 'design.kicad_sch'
 
     - name: Run Schematic and BOM 
       run: |
