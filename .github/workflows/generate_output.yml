@@ -100,7 +100,7 @@ jobs:
   BOM:
     name: Update Bom and upload
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: setsoft/kicad_auto:bullseye-6.0.0rc1-20211204
     # needs: ERC
 
     steps:
