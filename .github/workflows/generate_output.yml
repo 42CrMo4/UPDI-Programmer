@@ -78,9 +78,9 @@ jobs:
       run: |
         export COMMIT=$(git rev-parse --short HEAD)
         echo "COMMIT = ${COMMIT}"
-        sed -i "s!<<hash>>!Git-${COMMIT}!" *.sch
-        sed -i "s!<<project_name>>!${{ env.project_name }}!" *.sch
-        sed -i "s!<<date>>!$(date +'%Y-%m-%d')!" *.sch 
+        sed -i "s!<<hash>>!Git-${COMMIT}!" *.kicad_sch
+        sed -i "s!<<project_name>>!${{ env.project_name }}!" *.kicad_sch
+        sed -i "s!<<date>>!$(date +'%Y-%m-%d')!" *.kicad_sch 
     - name: Retrieve results from git hash update
       uses: actions/upload-artifact@v1
       with:
